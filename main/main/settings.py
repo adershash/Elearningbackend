@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
     'accounts',
 ]
 
@@ -50,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -119,6 +124,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+CORS_ALLOW_ALL_ORIGINS=True
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -129,3 +137,8 @@ REST_FRAMEWORK={
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+SIMPLE_JWT={
+    "BLACKLIST_AFTER_ROTATION":True,
+    "ROTATE_REFRESH_TOKENS":True,
+}
+

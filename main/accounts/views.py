@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializer import StudentSerializer,TeacherSerializer,AdminProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 
 class RegisterView(APIView):
@@ -34,5 +35,17 @@ class RoleInfoView(APIView):
             return Response({'role':'admin','data':AdminProfileSerializer(user.adiminprofile).data})
         else:
             return Response({'role':'unknown'})
+        
+class LogoutView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self,request):
+        try:
+            refresh_token=request.data['refresh']
+            token=RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         
         
